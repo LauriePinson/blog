@@ -2,49 +2,36 @@
 	$title = "Ajouter un article";
 	
 	require_once("includes/authenticated.php");
-	require_once("includes/actions.php");
-	include_once("includes/header.php");
+	include_once("includes/actions.php");
 	
-	$query = mysql_query("SELECT title, text FROM articles WHERE id_article='" . $_GET['id_article']); 
+	$articleTitle = '';
+	$articleText = '';
+	
+	if (isset($_POST['action']) && $_POST['action'] === 'form_articles') {
+		$articleTitle = $title = $_POST['title'];
+		$articleText = $text = $_POST['text'];
+		
+		$messages = array();
+		if (empty($title)) {
+			$messages['title'] = 'Veuillez saisir un titre';
+		}
+		if (empty($text)) {
+			$messages['text'] = 'Veuillez saisir un texte';
+		}
+
+
+		if (count($messages) === 0){
+			mysql_query("INSERT INTO articles   (title,text,date,user) VALUES('" . mysql_real_escape_string($title) . "', '" . mysql_real_escape_string($text) ."', NOW(), " . $_SESSION['user']['id'] . ")") or die (mysql_error());
+		exit;
+			header("Location: gestion_articles.php");
+		}
+	}
+	
+	include_once("includes/header.php");
+	include_once("includes/footer.php");
+	include_once("views/add_articles.view.php");
+	
 ?> 
 
-<h1>Ajouter un article</h1>
 
-<form action="add_articles.php" method="post">
-	<input type="hidden" name="action" value="add_article" />
-	<fieldset class="fields">
-		<div class="row">
-			<label for="title">Titre</label>
-			<input type="text" name="title" value="<?php if (isset($_POST['title'])) {
-															echo $_POST['title'];
-														}
-													?>" />
-		<?php 
-			if (isset($messages) && isset($messages['title'])) {
-				echo '<div class="error">' . $messages['title'] . '</div>';
-			}
-		?>
-		
-		</div>
-		<div class="row">
-			<label for="text">Texte</label>
-			<textarea name="text"><?php 
-				if (isset($_POST['text'])) {
-					echo $_POST['text'];
-				}
-				?></textarea>
-				
-				<?php 
-				if (isset($messages) && isset($messages['text'])) {
-					echo '<div class="error">' . $messages['text'] . '</div>';
-				}
-				?>
-		</div>
-	</fieldset>
-	
-	<fieldset class="actions">
-		<button type="submit">Enregistrer</button>
-	</fieldset>
-</form>
 
-<?php include_once('includes/footer.php'); ?>

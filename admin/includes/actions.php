@@ -37,7 +37,7 @@ if (isset ($_POST[ "action"]) && $_POST ["action"] === "login") {
 	}
 	else {
 		session_start();
-		$_SESSION['user'] = $login['username'];
+		$_SESSION['user'] = array("id"=>$login['id_user'],"username"=>$login['username']);
 		header("Location:index.php");//pas fini d'écrire
 	}
 }
@@ -46,24 +46,7 @@ if (isset($_GET['action'])&& $_GET['action'] === 'deconnexion') {
 	header ("Location: login.php");
 	}
 	
-if (isset($_POST['action']) && $_POST['action'] === 'add_article') {
-	$title = $_POST['title'];
-	$text = $_POST['text'];
-	
-	$messages = array();
-	if (empty($title)) {
-		$messages['title'] = 'Veuillez saisir un titre';
-	}
-	if (empty($text)) {
-		$messages['text'] = 'Veuillez saisir un texte';
-	}
 
-
-if (count($messages) === 0){
-	mysql_query("INSERT INTO articles   (title,text,date) VALUES('" . mysql_real_escape_string($title) . "', '" . mysql_real_escape_string($text) ."', NOW())");
-		header("Location: gestion_articles.php");
-	}
-}
 
 //note: ajouter un backslash(\) pour les apostrophes dans les chaines de caractères pour que php comprenne que ce n'est pas une fermeture de quote (comme ceci: c\'est//)
 
