@@ -4,7 +4,9 @@
 	require_once("includes/authenticated.php");
 	require_once("includes/actions.php");
 	include_once("includes/header.php");
-?>
+	
+	$query = mysql_query("SELECT title, text FROM articles WHERE id_article='" . $_GET['id_article']); 
+?> 
 
 <h1>Ajouter un article</h1>
 

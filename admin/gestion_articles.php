@@ -33,7 +33,10 @@
 				<td>' . $row['id_articles'] . '</td>
 				<td>' . $row['title'] . '</td>
 				<td>' . $row['date'] . '</td>
-				<td></td>
+				
+				<td>
+					<a href="edit_article.php?id_article=' . $row['id_articles'] . '">Modifier</a>
+				</td>
 			</tr>
 		';
 	}
